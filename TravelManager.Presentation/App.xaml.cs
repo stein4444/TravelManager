@@ -13,7 +13,6 @@ namespace TravelManager.Presentation
         {
             try
             {
-                // Initialize the ArcGIS Runtime before any components are created.
                 ArcGISRuntimeEnvironment.Initialize();
             }
             catch (Exception ex)

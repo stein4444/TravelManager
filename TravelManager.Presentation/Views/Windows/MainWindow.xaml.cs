@@ -1,6 +1,4 @@
-﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
-using System.Windows;
+﻿using System.Windows;
 
 namespace TravelManager.Presentation.Views.Windows
 {

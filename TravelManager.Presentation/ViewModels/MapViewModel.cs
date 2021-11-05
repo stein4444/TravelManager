@@ -1,12 +1,11 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using TravelManager.ApplicationServices.ViewModels.Base;
 
-namespace TravelManager.Presentation
+namespace TravelManager.Presentation.ViewModels
 {
-    public class MapViewModel : INotifyPropertyChanged
+    public class MapViewModel : ViewModelBase
     {
-        public MapViewModel() { }
+        //public MapViewModel() { }
 
         private Map _map = new Map(Basemap.CreateStreetsVector());
 
@@ -16,16 +15,7 @@ namespace TravelManager.Presentation
         public Map Map
         {
             get => _map;
-            set { _map = value; OnPropertyChanged(); }
+            set { SetProperty(ref _map, value); }
         }
-
-        /// <summary>
-        /// Raises the <see cref="MapViewModel.PropertyChanged" /> event
-        /// </summary>
-        /// <param name="propertyName">The name of the property that has changed</param>
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
