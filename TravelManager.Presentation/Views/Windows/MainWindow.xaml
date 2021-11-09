@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:TravelManager.Presentation.ViewModels" 
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="800" Background="#4889f0">
+        Title="{Binding Title}" Height="600" Width="800">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -25,7 +25,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel Grid.Column="1">
-                    <esri:MapView Map="{Binding MapVm.Map}" />
+                    <esri:MapView Map="{Binding MapViewModel.Map}" />
                 </DockPanel>
                 <DockPanel Grid.Column="0">
                     <DockPanel>
@@ -56,7 +56,7 @@
         <DockPanel Grid.Row="1" LastChildFill="True">
             <Border Background="LightGray" CornerRadius="10">
                 <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"
-                Content="{Binding StatusVm.Status}"></Label>
+                Content="{Binding StatusViewModel.Status}"></Label>
             </Border>
         </DockPanel>
     </Grid>

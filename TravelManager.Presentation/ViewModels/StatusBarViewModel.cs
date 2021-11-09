@@ -2,12 +2,12 @@
 
 namespace TravelManager.Presentation.ViewModels
 {
-    class StatusBarViewModel : ViewModelBase
+    public class StatusBarViewModel : ViewModelBase
     {
         private string _status = "Status";
 
         /// <summary>
-        /// Gets or sets the map
+        /// Gets or sets the Status
         /// </summary>
         public string Status
         {

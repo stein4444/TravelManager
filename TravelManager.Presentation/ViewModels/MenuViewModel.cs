@@ -2,7 +2,7 @@
 
 namespace TravelManager.Presentation.ViewModels
 {
-    class MenuViewModel : ViewModelBase
+    public class MenuViewModel : ViewModelBase
     {
         //Here will be a menu logic 
     }

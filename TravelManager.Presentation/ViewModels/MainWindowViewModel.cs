@@ -2,20 +2,21 @@
 
 namespace TravelManager.Presentation.ViewModels
 {
-    class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
-        #region ViewModels
-        public MapViewModel MapVm { get; set; }
-        public MenuViewModel MenuVm { get; set; }
-        public StatusBarViewModel StatusVm { get; set; }
-        #endregion
-
         #region PrivateFields
         private string _applicationTitile = "Travel Manager";
         #endregion
+        
+        #region ViewModels
+        public MapViewModel MapViewModel { get; set; }
+        public MenuViewModel MenuViewModel { get; set; }
+        public StatusBarViewModel StatusViewModel { get; set; }
+        #endregion
+
 
         /// <summary>
-        /// Gets or sets the map
+        /// Gets or sets the Title
         /// </summary>
         public string Title
         {
@@ -25,9 +26,9 @@ namespace TravelManager.Presentation.ViewModels
 
         public MainWindowViewModel()
         {
-            MapVm = new MapViewModel();
-            MenuVm = new MenuViewModel();
-            StatusVm = new StatusBarViewModel();
+            MapViewModel = new MapViewModel();
+            MenuViewModel = new MenuViewModel();
+            StatusViewModel = new StatusBarViewModel();
         }
     }
 }
