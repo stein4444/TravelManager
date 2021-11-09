@@ -5,8 +5,6 @@ namespace TravelManager.Presentation.ViewModels
 {
     public class MapViewModel : ViewModelBase
     {
-        //public MapViewModel() { }
-
         private Map _map = new Map(Basemap.CreateStreetsVector());
 
         /// <summary>
