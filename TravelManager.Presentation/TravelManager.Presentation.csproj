@@ -13,4 +13,20 @@
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\TravelManager.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Images\statue.jpg" />
+		<Resource Include="Images\beach.png" />
+		<Resource Include="Images\mountains.jpg" />
+		<Resource Include="Images\city.jpg" />
+		<Resource Include="Images\country.jpg" />
+	</ItemGroup>
+
 </Project>
