@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using TravelManager.Domain.Entities;
+using ArcGISHorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment;
+using ArcGISVerticalAlignment = Esri.ArcGISRuntime.Symbology.VerticalAlignment;
 
 namespace TravelManager.Presentation.Views.Windows
 {
@@ -24,18 +26,17 @@ namespace TravelManager.Presentation.Views.Windows
             _sketchOverlay = new GraphicsOverlay();
 
             // Add created overlay to the MapView
-            MyMap.GraphicsOverlays.Add(_sketchOverlay);
+            MainMap.GraphicsOverlays.Add(_sketchOverlay);
         }
-
+        
         private async void DrawButtonClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var pathToIcon = PoiTypesListBox.SelectedItem as Poi;
-                if (pathToIcon.ImagePath == null)
-                    MessageBox.Show($"{pathToIcon}");
+                var slectedPoi = (Poi)PoiTypesListBox.SelectedItem;
+                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(slectedPoi.ImagePath, slectedPoi.Name);
 
-                await CreatePictureMarkerSymbolFromResources(pathToIcon.ImagePath, pathToIcon.Name);
+                await CreatePictureMarkerSymbolFromResources(compositeSymbol);
             }
             catch (TaskCanceledException)
             {
@@ -48,24 +49,25 @@ namespace TravelManager.Presentation.Views.Windows
             }
         }
 
-        private async Task CreatePictureMarkerSymbolFromResources(string path, string name)
+        private async Task CreatePictureMarkerSymbolFromResources(CompositeSymbol compositeSymbol)
         {
             // Wait for the user to click a location on the map
-            Geometry mapPoint = await MyMap.SketchEditor.StartAsync(SketchCreationMode.Point, false);
+            Geometry mapPoint = await MainMap.SketchEditor.StartAsync(SketchCreationMode.Point, false);
 
-            var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(path, name);
+            if(mapPoint != null)
+            {
+                // Create graphic with the location and symbol
+                Graphic pinGraphic = new Graphic((MapPoint)mapPoint, compositeSymbol);
 
-            // Create graphic with the location and symbol
-            Graphic pinGraphic = new Graphic((MapPoint)mapPoint, compositeSymbol);
-
-            // Add graphic to the graphics overlay
-            _sketchOverlay.Graphics.Add(pinGraphic);
+                // Add graphic to the graphics overlay
+                _sketchOverlay.Graphics.Add(pinGraphic);
+            } 
         }
 
-        private CompositeSymbol GenerateCompositeSymbolWithTextLabelFromResources(string path, string name)
+        private CompositeSymbol GenerateCompositeSymbolWithTextLabelFromResources(string imagePath, string PoiName)
         {
             // Get image from local resource by path from UI 
-            Uri fileUri = new Uri($"pack://application:,,,{path}");
+            Uri fileUri = new Uri($"pack://application:,,,{imagePath}");
 
             // Creates marker symbol from uri
             PictureMarkerSymbol pinSymbol = new PictureMarkerSymbol(fileUri)
@@ -76,8 +78,7 @@ namespace TravelManager.Presentation.Views.Windows
             };
 
             var textSymbol = new TextSymbol(
-                name, Color.Black, 15, Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
-                Esri.ArcGISRuntime.Symbology.VerticalAlignment.Top);
+                PoiName, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
             textSymbol.BackgroundColor = Color.DarkGreen;
 
             var compositeSymbol = new CompositeSymbol();

@@ -25,7 +25,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel Grid.Column="1">
-                    <esri:MapView x:Name="MyMap" Map="{Binding MapViewModel.Map}" />
+                    <esri:MapView x:Name="MainMap" Map="{Binding MapViewModel.Map}" />
                 </DockPanel>
                 <DockPanel Grid.Column="0">
                     <DockPanel>
@@ -60,7 +60,7 @@
                             </DockPanel>
                             <Expander x:Name="AddModeExpander" Grid.Row="1" IsExpanded="False">
                                 <Expander>
-                                    <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding MenuViewModel.PoiTypes}">
+                                    <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding MenuViewModel.Points}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">

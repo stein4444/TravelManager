@@ -6,18 +6,23 @@ namespace TravelManager.Presentation.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
-        public List<Poi> PoiTypes
+        private List<Poi> _points;
+        public List<Poi> Points
         {
             get
             {
-                return new List<Poi>
-            {
-                new Poi { ImagePath = "/Images/beach.png", Name = "Beach"},
-                new Poi { ImagePath = "/Images/statue.jpg", Name = "Statue "},
-                new Poi { ImagePath = "/Images/city.jpg", Name = "City "},
-                new Poi { ImagePath = "/Images/country.jpg", Name = "Country "},
-                new Poi { ImagePath = "/Images/mountains.jpg", Name = "Mountains"}
-            };
+                if (_points == null)
+                {
+                    _points = new List<Poi>()
+                    {
+                        new Poi { ImagePath = "/Images/beach.png", Name = "Beach"},
+                        new Poi { ImagePath = "/Images/statue.jpg", Name = "Statue "},
+                        new Poi { ImagePath = "/Images/city.jpg", Name = "City "},
+                        new Poi { ImagePath = "/Images/country.jpg", Name = "Country "},
+                        new Poi { ImagePath = "/Images/mountains.jpg", Name = "Mountains"}
+                    };
+                }
+                return _points;
             }
         }
     }
