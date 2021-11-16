@@ -33,8 +33,8 @@ namespace TravelManager.Presentation.Views.Windows
         {
             try
             {
-                var slectedPoi = (Poi)PoiTypesListBox.SelectedItem;
-                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(slectedPoi.ImagePath, slectedPoi.Name);
+                var selectedPoi = (Poi)PoiTypesListBox.SelectedItem;
+                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(selectedPoi.ImagePath, selectedPoi.Name);
 
                 await CreatePictureMarkerSymbolFromResources(compositeSymbol);
             }
