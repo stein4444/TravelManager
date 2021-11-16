@@ -25,15 +25,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel Grid.Column="1">
-                    <esri:MapView Map="{Binding MapViewModel.Map}" />
+                    <esri:MapView x:Name="MainMap" Map="{Binding MapViewModel.Map}" />
                 </DockPanel>
                 <DockPanel Grid.Column="0">
                     <DockPanel>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <DockPanel Grid.Row="0">
                                 <Grid>
@@ -44,10 +43,35 @@
                                     <Border Grid.Row="0" Grid.Column="1" Background="LightGray"  Margin="10">
                                         <Label Content="Managment panel" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
                                     </Border>
-                                    <Button Grid.Row="1" FontSize="20" Margin="10"
-                                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}">ADD</Button>
+                                    <DockPanel Grid.Row="1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="1" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">ADD</Button>
+                                            <Button Grid.Column="0" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                Click="DrawButtonClick"> Draw</Button>
+                                        </Grid>
+                                    </DockPanel>
                                 </Grid>
                             </DockPanel>
+                            <Expander x:Name="AddModeExpander" Grid.Row="1" IsExpanded="False">
+                                <Expander>
+                                    <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding MenuViewModel.Points}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image x:Name="ImageItem" Source="{Binding Path=ImagePath}" Width="52" Height="52"></Image>
+                                                    <TextBlock x:Name="TextItem" Text="{Binding Path=Name}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"></TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Expander>
+                            </Expander>
                         </Grid>
                     </DockPanel>
                 </DockPanel>
