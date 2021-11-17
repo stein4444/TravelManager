@@ -17,7 +17,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _map = value;
-                OnPropertyChanged(nameof(Map));
+                OnPropertyChanged();
             }
         }
 

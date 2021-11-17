@@ -19,7 +19,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _tripModel.Name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged();
             }
         }
 
@@ -29,7 +29,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _tripModel.Description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
 
@@ -39,7 +39,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _tripModel.VisitDate = value;
-                OnPropertyChanged(nameof(VisitDate));
+                OnPropertyChanged();
             }
         }
 
@@ -49,7 +49,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _tripModel.Type = value;
-                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged();
             }
         }
     }

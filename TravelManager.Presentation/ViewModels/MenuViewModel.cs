@@ -25,7 +25,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _newTrip = value;
-                OnPropertyChanged(nameof(NewTrip));
+                OnPropertyChanged();
             }
         }
 

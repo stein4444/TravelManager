@@ -15,7 +15,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _status = value;
-                OnPropertyChanged(nameof(Status));
+                OnPropertyChanged();
             }
         }
     }

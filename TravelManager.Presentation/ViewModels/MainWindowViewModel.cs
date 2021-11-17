@@ -24,7 +24,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _applicationTitile = value;
-                OnPropertyChanged(nameof(Title));
+                OnPropertyChanged();
             }
         }
 
