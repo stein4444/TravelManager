@@ -12,7 +12,11 @@ namespace TravelManager.Presentation.ViewModels
         public string Status
         {
             get => _status;
-            set { SetProperty(ref _status, value); }
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

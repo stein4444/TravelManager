@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.UI;
 using TravelManager.ApplicationServices.ViewModels.Base;
 
 namespace TravelManager.Presentation.ViewModels
@@ -13,7 +14,13 @@ namespace TravelManager.Presentation.ViewModels
         public Map Map
         {
             get => _map;
-            set { SetProperty(ref _map, value); }
+            set
+            {
+                _map = value;
+                OnPropertyChanged();
+            }
         }
+
+        public GraphicsOverlay TripsOverlay { get; set; }
     }
 }

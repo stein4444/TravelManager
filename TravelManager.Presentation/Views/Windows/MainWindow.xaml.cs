@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using TravelManager.Domain.Entities;
+using TravelManager.Presentation.ViewModels;
 using ArcGISHorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment;
 using ArcGISVerticalAlignment = Esri.ArcGISRuntime.Symbology.VerticalAlignment;
 
@@ -22,11 +23,15 @@ namespace TravelManager.Presentation.Views.Windows
         {
             InitializeComponent();
 
+            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
+
             // Creates overlay for the MapView
             _sketchOverlay = new GraphicsOverlay();
 
             // Add created overlay to the MapView
             MainMap.GraphicsOverlays.Add(_sketchOverlay);
+
+            mainWindowViewModel.MapViewModel.TripsOverlay = _sketchOverlay;
         }
         
         private async void DrawButtonClick(object sender, RoutedEventArgs e)
@@ -34,7 +39,7 @@ namespace TravelManager.Presentation.Views.Windows
             try
             {
                 var selectedPoi = (Poi)PoiTypesListBox.SelectedItem;
-                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(selectedPoi.ImagePath, selectedPoi.Name);
+                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(selectedPoi.ImagePath);
 
                 await CreatePictureMarkerSymbolFromResources(compositeSymbol);
             }
@@ -64,7 +69,7 @@ namespace TravelManager.Presentation.Views.Windows
             } 
         }
 
-        private CompositeSymbol GenerateCompositeSymbolWithTextLabelFromResources(string imagePath, string PoiName)
+        private CompositeSymbol GenerateCompositeSymbolWithTextLabelFromResources(string imagePath)
         {
             // Get image from local resource by path from UI 
             Uri fileUri = new Uri($"pack://application:,,,{imagePath}");
@@ -78,7 +83,7 @@ namespace TravelManager.Presentation.Views.Windows
             };
 
             var textSymbol = new TextSymbol(
-                PoiName, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
+                PositionName.Text, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
             textSymbol.BackgroundColor = Color.DarkGreen;
 
             var compositeSymbol = new CompositeSymbol();

@@ -7,13 +7,13 @@
         xmlns:vm="clr-namespace:TravelManager.Presentation.ViewModels" 
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="800">
+        Title="{Binding Title}" Height="768" Width="1024">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
@@ -49,29 +49,55 @@
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Grid.Column="1" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">ADD</Button>
+
                                             <Button Grid.Column="0" FontSize="20" Margin="10"
                                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                                Click="DrawButtonClick"> Draw</Button>
+                                                Click="DrawButtonClick">Draw</Button>
+                                            <Button Grid.Column="1" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">remove</Button>
                                         </Grid>
                                     </DockPanel>
                                 </Grid>
                             </DockPanel>
-                            <Expander x:Name="AddModeExpander" Grid.Row="1" IsExpanded="False">
-                                <Expander>
-                                    <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding MenuViewModel.Points}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image x:Name="ImageItem" Source="{Binding Path=ImagePath}" Width="52" Height="52"></Image>
-                                                    <TextBlock x:Name="TextItem" Text="{Binding Path=Name}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"></TextBlock>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
+                            <StackPanel Grid.Row="1" DataContext="{Binding MenuViewModel.NewTrip, Mode=TwoWay}">
+                                <Expander Header="Add new trip">
+                                    <StackPanel>
+                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location"/>
+
+                                        <TextBox x:Name="PositionName" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        
+                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location Description"/>
+                                        
+                                        <TextBox x:Name="PossitionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        
+                                        <Label>Visit Date</Label>
+                                        
+                                        <DatePicker x:Name="TripDate" SelectedDate="{Binding VisitDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        
+                                        <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
+                                                 SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        
+                                        <Button Grid.Column="1" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}" 
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AddTrip}">ADD</Button>
+                                        
+                                        <Button Grid.Column="1" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">save</Button>
+                                    </StackPanel>
                                 </Expander>
-                            </Expander>
+                                <Expander Grid.Row="1" Header="All trips">
+                                    <ListView x:Name="TripList" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AllTrips}">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="100">Description</GridViewColumn>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Path=VisitDate}">Date</GridViewColumn>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Path=Type}">Type</GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </Expander>
+                            </StackPanel>
                         </Grid>
                     </DockPanel>
                 </DockPanel>
