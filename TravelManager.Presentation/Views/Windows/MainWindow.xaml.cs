@@ -83,7 +83,7 @@ namespace TravelManager.Presentation.Views.Windows
             };
 
             var textSymbol = new TextSymbol(
-                PossitionName.Text, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
+                PositionName.Text, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
             textSymbol.BackgroundColor = Color.DarkGreen;
 
             var compositeSymbol = new CompositeSymbol();

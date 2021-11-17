@@ -17,15 +17,10 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _map = value;
-                OnPropertyChanged("_map");
+                OnPropertyChanged(nameof(Map));
             }
         }
 
-        private GraphicsOverlay _tripsOverlay;
-        public GraphicsOverlay TripsOverlay
-        {
-            get { return _tripsOverlay; }
-            set { _tripsOverlay = value; }
-        }
+        public GraphicsOverlay TripsOverlay { get; set; }
     }
 }
