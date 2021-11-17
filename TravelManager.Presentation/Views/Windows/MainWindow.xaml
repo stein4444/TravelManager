@@ -69,12 +69,14 @@
                                         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location Description"/>
                                         
                                         <TextBox x:Name="PossitionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                        
-                                        <Label>Visit Date</Label>
+
+                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center">Visit Date</Label>
                                         
                                         <DatePicker x:Name="TripDate" SelectedDate="{Binding VisitDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center">Trip types</Label>
                                         
-                                        <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
+                                        <ComboBox x:Name="PoiTypesListBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
                                                  SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                         
                                         <Button Grid.Column="1" FontSize="20" Margin="10"
