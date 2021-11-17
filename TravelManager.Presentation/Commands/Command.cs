@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace TravelManager.Presentation.Commands
 {
-    internal abstract class Command : ICommand
+    public abstract class Command : ICommand
     {
         public event EventHandler CanExecuteChanged;
 

@@ -33,8 +33,8 @@ namespace TravelManager.Presentation.Views.Windows
         {
             try
             {
-                var slectedPoi = (Poi)PoiTypesListBox.SelectedItem;
-                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(slectedPoi.ImagePath, slectedPoi.Name);
+                var selectedPoi = (Poi)PoiTypesListBox.SelectedItem;
+                var compositeSymbol = GenerateCompositeSymbolWithTextLabelFromResources(selectedPoi.ImagePath);
 
                 await CreatePictureMarkerSymbolFromResources(compositeSymbol);
             }
@@ -64,7 +64,7 @@ namespace TravelManager.Presentation.Views.Windows
             } 
         }
 
-        private CompositeSymbol GenerateCompositeSymbolWithTextLabelFromResources(string imagePath, string PoiName)
+        private CompositeSymbol GenerateCompositeSymbolWithTextLabelFromResources(string imagePath)
         {
             // Get image from local resource by path from UI 
             Uri fileUri = new Uri($"pack://application:,,,{imagePath}");
@@ -78,7 +78,7 @@ namespace TravelManager.Presentation.Views.Windows
             };
 
             var textSymbol = new TextSymbol(
-                PoiName, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
+                PossitionName.Text, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
             textSymbol.BackgroundColor = Color.DarkGreen;
 
             var compositeSymbol = new CompositeSymbol();
@@ -86,6 +86,11 @@ namespace TravelManager.Presentation.Views.Windows
             compositeSymbol.Symbols.Add(textSymbol);
 
             return compositeSymbol;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace TravelManager.Presentation.Commands
 {
-    internal sealed class DelegateCommand : Command
+    public sealed class DelegateCommand : Command
     {
         private static readonly Func<object, bool> defaultCanExecuteMethod = (obj) => true;
 

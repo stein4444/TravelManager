@@ -1,28 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using TravelManager.ApplicationServices.ViewModels.Base;
 using TravelManager.Domain.Entities;
+using TravelManager.Presentation.Commands;
 
 namespace TravelManager.Presentation.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
-        private List<Poi> _points;
-        public List<Poi> Points
+        public MenuViewModel()
+        {
+            _newTrip = new TripViewModel(new TripModel());
+            AllTrips = new ObservableCollection<TripViewModel>();
+        }
+
+        public ObservableCollection<TripViewModel> AllTrips { get; set; }
+
+        private TripViewModel _newTrip;
+        public TripViewModel NewTrip
+        {
+            get { return _newTrip; }
+            set
+            {
+                _newTrip = value;
+                SetProperty(ref _newTrip, value);
+            }
+        }
+
+        public IEnumerable<TripType> TripTypes
         {
             get
             {
-                if (_points == null)
-                {
-                    _points = new List<Poi>()
-                    {
-                        new Poi { ImagePath = "/Images/beach.png", Name = "Beach"},
-                        new Poi { ImagePath = "/Images/statue.jpg", Name = "Statue "},
-                        new Poi { ImagePath = "/Images/city.jpg", Name = "City "},
-                        new Poi { ImagePath = "/Images/country.jpg", Name = "Country "},
-                        new Poi { ImagePath = "/Images/mountains.jpg", Name = "Mountains"}
-                    };
-                }
-                return _points;
+                return Enum.GetValues(typeof(TripType))
+                    .Cast<TripType>();
+            }
+        }
+
+        private DelegateCommand _addTrip;
+        public DelegateCommand AddTrip
+        {
+            get
+            {
+                return _addTrip ??
+                  (_addTrip = new DelegateCommand(obj =>
+                  {
+                      AllTrips.Add(NewTrip);
+                      NewTrip = new TripViewModel(new TripModel());
+                  }));
             }
         }
     }
