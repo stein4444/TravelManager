@@ -22,6 +22,7 @@ namespace TravelManager.Presentation.ViewModels
                 OnPropertyChanged("Name");
             }
         }
+
         public string Description
         {
             get { return _tripModel.Description; }
@@ -31,6 +32,7 @@ namespace TravelManager.Presentation.ViewModels
                 OnPropertyChanged("Description");
             }
         }
+
         public DateTime VisitDate
         {
             get { return _tripModel.VisitDate; }
@@ -50,6 +52,5 @@ namespace TravelManager.Presentation.ViewModels
                 OnPropertyChanged("Type");
             }
         }
-       
     }
 }

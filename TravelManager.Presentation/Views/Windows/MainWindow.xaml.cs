@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using TravelManager.Domain.Entities;
+using TravelManager.Presentation.ViewModels;
 using ArcGISHorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment;
 using ArcGISVerticalAlignment = Esri.ArcGISRuntime.Symbology.VerticalAlignment;
 
@@ -22,11 +23,15 @@ namespace TravelManager.Presentation.Views.Windows
         {
             InitializeComponent();
 
+            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
+
             // Creates overlay for the MapView
             _sketchOverlay = new GraphicsOverlay();
 
             // Add created overlay to the MapView
             MainMap.GraphicsOverlays.Add(_sketchOverlay);
+
+            mainWindowViewModel.MapViewModel.TripsOverlay = _sketchOverlay;
         }
         
         private async void DrawButtonClick(object sender, RoutedEventArgs e)
@@ -86,11 +91,6 @@ namespace TravelManager.Presentation.Views.Windows
             compositeSymbol.Symbols.Add(textSymbol);
 
             return compositeSymbol;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

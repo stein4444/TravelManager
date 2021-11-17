@@ -12,7 +12,7 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-
+    
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -32,12 +32,11 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <DockPanel Grid.Row="0">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition/>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
@@ -50,22 +49,11 @@
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Grid.Column="1" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Command="{Binding MenuViewModel.AddTrip}">ADD</Button>
+
                                             <Button Grid.Column="0" FontSize="20" Margin="10"
                                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                                                 Click="DrawButtonClick">Draw</Button>
-                                        </Grid>
-                                    </DockPanel>
-                                    <DockPanel Grid.Row="2">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
                                             <Button Grid.Column="1" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">save</Button>
-                                            <Button Grid.Column="0" FontSize="20" Margin="10"
                                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}">remove</Button>
                                         </Grid>
                                     </DockPanel>
@@ -75,13 +63,26 @@
                                 <Expander Header="Add new trip">
                                     <StackPanel>
                                         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location"/>
+                                        
                                         <TextBox x:Name="PossitionName" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        
                                         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location Description"/>
+                                        
                                         <TextBox x:Name="PossitionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        
                                         <Label>Visit Date</Label>
+                                        
                                         <DatePicker x:Name="TripDate" SelectedDate="{Binding VisitDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        
                                         <ListBox x:Name="PoiTypesListBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
                                                  SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        
+                                        <Button Grid.Column="1" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}" 
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AddTrip}">ADD</Button>
+                                        
+                                        <Button Grid.Column="1" FontSize="20" Margin="10"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">save</Button>
                                     </StackPanel>
                                 </Expander>
                                 <Expander Grid.Row="1" Header="All trips">

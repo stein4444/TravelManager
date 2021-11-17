@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.UI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,6 +17,14 @@ namespace TravelManager.Presentation.ViewModels
             AllTrips = new ObservableCollection<TripViewModel>();
         }
 
+        private GraphicsOverlay _tripsOverlay;
+
+        public GraphicsOverlay TripsOverlay
+        {
+            get { return _tripsOverlay; }
+            set { _tripsOverlay = value; }
+        }
+
         public ObservableCollection<TripViewModel> AllTrips { get; set; }
 
         private TripViewModel _newTrip;
@@ -25,7 +34,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _newTrip = value;
-                SetProperty(ref _newTrip, value);
+                OnPropertyChanged("_newTrip");
             }
         }
 
