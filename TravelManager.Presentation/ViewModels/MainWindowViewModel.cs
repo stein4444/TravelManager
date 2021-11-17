@@ -21,7 +21,11 @@ namespace TravelManager.Presentation.ViewModels
         public string Title
         {
             get => _applicationTitile;
-            set { SetProperty(ref _applicationTitile, value); }
+            set
+            {
+                _applicationTitile = value;
+                OnPropertyChanged(nameof(Title));
+            }
         }
 
         public MainWindowViewModel()
