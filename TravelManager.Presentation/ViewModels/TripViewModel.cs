@@ -35,7 +35,14 @@ namespace TravelManager.Presentation.ViewModels
 
         public DateTime VisitDate
         {
-            get { return _tripModel.VisitDate; }
+            get
+            {
+                if (_tripModel.VisitDate < DateTime.Today)
+                {
+                    _tripModel.VisitDate = DateTime.Today;
+                }
+                return _tripModel.VisitDate;
+            }
             set
             {
                 _tripModel.VisitDate = value;
