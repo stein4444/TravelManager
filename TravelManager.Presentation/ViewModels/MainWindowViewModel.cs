@@ -1,4 +1,5 @@
 ﻿using TravelManager.ApplicationServices.ViewModels.Base;
+using TravelManager.Domain.Interfaces;
 
 namespace TravelManager.Presentation.ViewModels
 {
@@ -6,14 +7,15 @@ namespace TravelManager.Presentation.ViewModels
     {
         #region PrivateFields
         private string _applicationTitile = "Travel Manager";
+        private readonly ITripGraphicsManager _tripManager;
+
         #endregion
-        
+
         #region ViewModels
         public MapViewModel MapViewModel { get; set; }
         public MenuViewModel MenuViewModel { get; set; }
         public StatusBarViewModel StatusViewModel { get; set; }
         #endregion
-
 
         /// <summary>
         /// Gets or sets the Title
@@ -28,10 +30,11 @@ namespace TravelManager.Presentation.ViewModels
             }
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(ITripGraphicsManager tripManager)
         {
+            _tripManager = tripManager;
             MapViewModel = new MapViewModel();
-            MenuViewModel = new MenuViewModel();
+            MenuViewModel = new MenuViewModel(_tripManager);
             StatusViewModel = new StatusBarViewModel();
         }
     }

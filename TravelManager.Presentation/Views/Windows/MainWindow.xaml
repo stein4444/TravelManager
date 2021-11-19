@@ -9,10 +9,15 @@
         mc:Ignorable="d"
         Title="{Binding Title}" Height="768" Width="1024">
 
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    
+    <Window.Resources>
+        <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
+            <Style.Setters>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -32,59 +37,43 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="4*"/>
                             </Grid.RowDefinitions>
                             <DockPanel Grid.Row="0">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" Grid.Column="1" Background="LightGray"  Margin="10">
-                                        <Label Content="Managment panel" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-                                    </Border>
-                                    <DockPanel Grid.Row="1">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <Button Grid.Column="0" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                                Click="DrawButtonClick">Draw</Button>
-                                            <Button Grid.Column="1" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">remove</Button>
-                                        </Grid>
-                                    </DockPanel>
-                                </Grid>
+                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray"  Margin="10">
+                                    <Label Content="Managment panel" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+                                </Border>
                             </DockPanel>
-                            <StackPanel Grid.Row="1" DataContext="{Binding MenuViewModel.NewTrip, Mode=TwoWay}">
+                            <StackPanel Grid.Row="1" DataContext="{Binding MenuViewModel, Mode=TwoWay}">
                                 <Expander Header="Add new trip">
                                     <StackPanel>
-                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location"/>
+                                        <Label Style="{StaticResource LabelStyle}" Content="Location"/>
 
                                         <TextBox x:Name="PositionName" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                        
-                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Location Description"/>
-                                        
-                                        <TextBox x:Name="PossitionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center">Visit Date</Label>
+                                        <Label Style="{StaticResource LabelStyle}" Content="Location Description"/>
+                                        
+                                        <TextBox x:Name="PositionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                                        <Label Style="{StaticResource LabelStyle}">Visit Date</Label>
                                         
                                         <DatePicker x:Name="TripDate" SelectedDate="{Binding VisitDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                                        <Label VerticalAlignment="Center" HorizontalAlignment="Center">Trip types</Label>
-                                        
-                                        <ComboBox x:Name="PoiTypesListBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
+                                        <Label Style="{StaticResource LabelStyle}">Trip types</Label>
+
+                                        <ComboBox x:Name="PoiTypesComboBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
                                                  SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                        
+
+                                        <Button Grid.Column="1" FontSize="20" Margin="10" Content="Draw"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.DrawCommand}">
+                                        </Button>
+
                                         <Button Grid.Column="1" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}" 
-                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AddTrip}">ADD</Button>
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Content="Save"
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AddTrip}">
+                                        </Button>
                                         
-                                        <Button Grid.Column="1" FontSize="20" Margin="10"
-                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">save</Button>
                                     </StackPanel>
                                 </Expander>
                                 <Expander Grid.Row="1" Header="All trips">
@@ -94,7 +83,8 @@
                                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="100">Description</GridViewColumn>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Path=VisitDate}">Date</GridViewColumn>
-                                                <GridViewColumn DisplayMemberBinding="{Binding Path=Type}">Type</GridViewColumn>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Path=Type}" >Type
+                                                </GridViewColumn>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>

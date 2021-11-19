@@ -4,6 +4,11 @@ namespace TravelManager.Domain.Entities
 {
     public class TripModel 
     {
+        public TripModel()
+        {
+            VisitDate = DateTime.Today;
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime VisitDate { get; set; }

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\TravelManager.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\TravelManager.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

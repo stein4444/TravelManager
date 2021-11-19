@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelManager.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelManager.Presentation", "TravelManager.Presentation\TravelManager.Presentation.csproj", "{201A8CF2-75E2-424D-8BCF-1B8A3A7CF272}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelManager.DomainServices", "TravelManager.DomainServices\TravelManager.DomainServices.csproj", "{451D4EFA-CE63-475A-AACB-F6034FAAB0DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelManager.DomainServices", "TravelManager.DomainServices\TravelManager.DomainServices.csproj", "{451D4EFA-CE63-475A-AACB-F6034FAAB0DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
