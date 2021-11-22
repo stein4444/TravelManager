@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI;
+using System;
 using TravelManager.ApplicationServices.ViewModels.Base;
 using TravelManager.Domain.Entities;
 
@@ -11,6 +13,11 @@ namespace TravelManager.Presentation.ViewModels
         public TripViewModel(TripModel model)
         {
             _tripModel = model;
+        }
+
+        public string Id
+        {
+            get { return _tripModel.Id; }
         }
 
         public string Name
@@ -52,6 +59,16 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _tripModel.Type = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public MapPoint Point
+        {
+            get { return _tripModel.Point; }
+            set
+            {
+                _tripModel.Point = value;
                 OnPropertyChanged();
             }
         }

@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-        xmlns:vm="clr-namespace:TravelManager.Presentation.ViewModels" 
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:TravelManager.Presentation.Convertors"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="768" Width="1024">
 
@@ -16,6 +17,8 @@
                 <Setter Property="HorizontalAlignment" Value="Left"></Setter>
             </Style.Setters>
         </Style>
+
+        <local:UriConverter x:Key="UriConverter" />
     </Window.Resources>
 
     <Grid x:Name="MainGrid">
@@ -29,7 +32,7 @@
                     <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel Grid.Column="1">
+                <DockPanel Grid.Column="1" Cursor="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.CursoreType, Mode=TwoWay}">
                     <esri:MapView x:Name="MainMap" Map="{Binding MapViewModel.Map}" />
                 </DockPanel>
                 <DockPanel Grid.Column="0">
@@ -56,8 +59,8 @@
                                         <TextBox x:Name="PositionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                                         <Label Style="{StaticResource LabelStyle}">Visit Date</Label>
-                                        
-                                        <DatePicker x:Name="TripDate" SelectedDate="{Binding VisitDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                        <DatePicker x:Name="TripDate" SelectedDate="{Binding VisitDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" DisplayDateStart="{x:Static sys:DateTime.Today}"/>
 
                                         <Label Style="{StaticResource LabelStyle}">Trip types</Label>
 
@@ -73,7 +76,12 @@
                                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}" Content="Save"
                                                 Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AddTrip}">
                                         </Button>
-                                        
+
+                                        <Button Grid.Column="1" FontSize="20" Margin="10" Content="remove"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.RemoveCommand}">
+                                        </Button>
+
                                     </StackPanel>
                                 </Expander>
                                 <Expander Grid.Row="1" Header="All trips">
@@ -82,8 +90,13 @@
                                             <GridView>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="100">Description</GridViewColumn>
-                                                <GridViewColumn DisplayMemberBinding="{Binding Path=VisitDate}">Date</GridViewColumn>
-                                                <GridViewColumn DisplayMemberBinding="{Binding Path=Type}" >Type
+                                                <GridViewColumn DisplayMemberBinding="{Binding Path=VisitDate, StringFormat={}{0:MM/dd/yyyy}}">Date</GridViewColumn>
+                                                <GridViewColumn Header="Type">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Image Source="{Binding Path=Type, Converter={StaticResource UriConverter}}"></Image>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
                                             </GridView>
                                         </ListView.View>

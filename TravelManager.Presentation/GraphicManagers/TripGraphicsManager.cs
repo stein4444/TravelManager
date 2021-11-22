@@ -1,34 +1,38 @@
-﻿using Esri.ArcGISRuntime.Geometry;
+﻿using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using TravelManager.Domain.Entities;
 using TravelManager.Domain.Interfaces;
+using TravelManager.Domain.Resourses;
 using ArcGISHorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment;
 using ArcGISVerticalAlignment = Esri.ArcGISRuntime.Symbology.VerticalAlignment;
+using SystemColor = System.Drawing.Color;
 
-namespace TravelManager.Infrastructure.GraphicManagers
+namespace TravelManager.Presentation.GraphicsManger
 {
     public class TripGraphicsManager : ITripGraphicsManager
     {
         private readonly GraphicsOverlay _overlay;
         private readonly SketchEditor _sketchEditor;
-        private Dictionary<TripType, Uri> _images;
+        private readonly MapView _map;
+        private ImageResourse _images;
+        private const string TRIPID = "id";
 
-        public TripGraphicsManager(GraphicsOverlay overlay, SketchEditor sketchEditor)
+        public TripGraphicsManager(MapView map)
         {
-            _overlay = overlay;
-            _sketchEditor = sketchEditor;
-            _images = new Dictionary<TripType, Uri>()
-            {
-                { TripType.Architecture, new Uri($"pack://application:,,,/Images/statue.jpg") },
-                { TripType.Beach, new Uri($"pack://application:,,,/Images/beach.png") },
-                { TripType.Park, new Uri($"pack://application:,,,/Images/mountains.jpg") }
-            };
+            _overlay = map.GraphicsOverlays.Single();
+            _sketchEditor = map.SketchEditor;
+            _map = map;
+            _images = new ImageResourse(); 
         }
+
         public async Task<Graphic> DrawTrip(TripType type, string label, string id)
         {
             try
@@ -37,9 +41,9 @@ namespace TravelManager.Infrastructure.GraphicManagers
 
                 if (mapPoint != null)
                 {
-                    var compositeSymbol = CreateTripSymbol(_images[type], label);
+                    var compositeSymbol = CreateTripSymbol(_images.Images[type], label);
                     Graphic tripGraphic = new Graphic((MapPoint)mapPoint, compositeSymbol);
-                    tripGraphic.Attributes["id"] = id;
+                    tripGraphic.Attributes[TRIPID] = id;
                     _overlay.Graphics.Add(tripGraphic);
                     return tripGraphic;
                 }
@@ -55,6 +59,31 @@ namespace TravelManager.Infrastructure.GraphicManagers
             }
         }
 
+        public async Task<Graphic> DeleteTrip()
+        {
+            var graphic = await GetGraphicAsync();
+            _overlay.Graphics.Remove(graphic);
+            return graphic;
+        }
+
+        private async Task<Graphic> GetGraphicAsync()
+        {
+            Geometry mapPoint = await _map.SketchEditor.StartAsync(SketchCreationMode.Point, false);
+
+            Point screenCoordinate = _map.LocationToScreen((MapPoint)mapPoint);
+
+            IReadOnlyList<IdentifyGraphicsOverlayResult> results = await _map.IdentifyGraphicsOverlaysAsync(screenCoordinate, 2, false);
+
+            Graphic graphic = null;
+            IdentifyGraphicsOverlayResult idResult = results.FirstOrDefault();
+            if (idResult != null && idResult.Graphics.Count > 0)
+            {
+                graphic = idResult.Graphics.FirstOrDefault();
+            }
+
+            return graphic;
+        }
+
         private CompositeSymbol CreateTripSymbol(Uri image, string name)
         {
             // Creates marker symbol from uri
@@ -66,8 +95,8 @@ namespace TravelManager.Infrastructure.GraphicManagers
             };
 
             var textSymbol = new TextSymbol(
-                name, Color.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
-            textSymbol.BackgroundColor = Color.DarkGreen;
+                name, SystemColor.Black, 15, ArcGISHorizontalAlignment.Center, ArcGISVerticalAlignment.Top);
+            textSymbol.BackgroundColor = SystemColor.DarkGreen;
 
             var compositeSymbol = new CompositeSymbol();
             compositeSymbol.Symbols.Add(pinSymbol);
