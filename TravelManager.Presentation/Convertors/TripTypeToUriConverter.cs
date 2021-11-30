@@ -7,14 +7,14 @@ using TravelManager.Domain.Resourses;
 
 namespace TravelManager.Presentation.Convertors
 {
-    public class UriConverter : IValueConverter
+    public class TripTypeToUriConverter : IValueConverter
     {
-        private ImageResourse _imageDictionary = new ImageResourse();
+        private static ImageResourse _imageDictionary = new ImageResourse();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
             {
-                return null;
+                return DependencyProperty.UnsetValue;
             }
                
             Uri imagePath = _imageDictionary.Images[(TripType)value];

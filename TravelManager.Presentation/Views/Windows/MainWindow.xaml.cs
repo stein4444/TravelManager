@@ -19,9 +19,9 @@ namespace TravelManager.Presentation.Views.Windows
             MainMap.GraphicsOverlays.Add(tripsOverlay);
 
             TripGraphicsManager tripManager = new TripGraphicsManager(MainMap);
+            MessageBoxWrapper messageBoxWrapper = new MessageBoxWrapper();
 
-
-            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(tripManager);
+            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(tripManager,messageBoxWrapper);
             this.DataContext = mainWindowViewModel;
         }
     }

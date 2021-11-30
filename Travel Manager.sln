@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelManager.Presentation"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelManager.DomainServices", "TravelManager.DomainServices\TravelManager.DomainServices.csproj", "{451D4EFA-CE63-475A-AACB-F6034FAAB0DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelManager_MsTests", "TravelManager_MsTests\TravelManager_MsTests.csproj", "{ECBF90A2-7ED8-4DE3-84C5-68C4654D0895}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{451D4EFA-CE63-475A-AACB-F6034FAAB0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{451D4EFA-CE63-475A-AACB-F6034FAAB0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{451D4EFA-CE63-475A-AACB-F6034FAAB0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECBF90A2-7ED8-4DE3-84C5-68C4654D0895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECBF90A2-7ED8-4DE3-84C5-68C4654D0895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECBF90A2-7ED8-4DE3-84C5-68C4654D0895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECBF90A2-7ED8-4DE3-84C5-68C4654D0895}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

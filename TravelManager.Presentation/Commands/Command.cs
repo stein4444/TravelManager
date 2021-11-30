@@ -7,9 +7,9 @@ namespace TravelManager.Presentation.Commands
     {
         public event EventHandler CanExecuteChanged;
 
-        protected virtual bool CanExecute(object parameter) => true;
+        public virtual bool CanExecute(object parameter) => true;
 
-        protected abstract void Execute(object parameter);
+        public abstract void Execute(object parameter);
 
         protected virtual void OnCanExecuteChanged(EventArgs e)
         {

@@ -14,17 +14,20 @@ namespace TravelManager.Presentation.ViewModels
     public class MenuViewModel : ViewModelBase
     {
         private const int MIN_TRIP_NAME_LENGTH = 3;
-        private const string TRIPID = "id";
+        private const string TRIP_ID = "id";
         private readonly ITripGraphicsManager _tripManager;
+        private readonly IMessageBoxWrapper _messageBox;
         private TripModel _newTrip;
 
-        public MenuViewModel(ITripGraphicsManager tripManager)
+        public MenuViewModel(ITripGraphicsManager tripManager, IMessageBoxWrapper messageBox)
         {
             _tripManager = tripManager;
+            _messageBox = messageBox;
             _newTrip = new TripModel(); 
             AllTrips = new ObservableCollection<TripViewModel>();
-            _cursoreType = CursorType.Arrow.ToString();
+            _cursorType = Cursors.Arrow;
         }
+
         public ObservableCollection<TripViewModel> AllTrips { get; set; }
 
         public IEnumerable<TripType> TripTypes
@@ -36,14 +39,14 @@ namespace TravelManager.Presentation.ViewModels
             }
         }
 
-        private string _cursoreType;
-        public string CursoreType
+        private Cursor _cursorType;
+        public Cursor CursorType
         {
-            get { return _cursoreType; }
+            get { return _cursorType; }
             set 
-            { 
-                _cursoreType = value;
-                RemoveCommand.RaiseCanExecuteChanged();
+            {
+                _cursorType = value;
+                RemoveTripFromMap.RaiseCanExecuteChanged();
                 OnPropertyChanged();
             }
         }
@@ -58,7 +61,7 @@ namespace TravelManager.Presentation.ViewModels
             set
             {
                 _name = value;
-                AddTrip.RaiseCanExecuteChanged();
+                RemoveTripFromMap.RaiseCanExecuteChanged();
                 OnPropertyChanged();
             }
         }
@@ -114,7 +117,7 @@ namespace TravelManager.Presentation.ViewModels
                       _newTrip.VisitDate = VisitDate;
                       AllTrips.Add(new TripViewModel(_newTrip));
                       ResetTripForm();
-                      RemoveCommand.RaiseCanExecuteChanged();
+                      
                   }, obj =>
                   {
                       return Name?.Length > MIN_TRIP_NAME_LENGTH && _newTrip.Point != null;
@@ -133,10 +136,17 @@ namespace TravelManager.Presentation.ViewModels
                     (_drawCommand = new DelegateCommand(async obj =>
                     {
                         var graphic = await _tripManager.DrawTrip(Type, Name, _newTrip.Id);
+
+                        if (graphic == null)
+                        {
+                            return;
+                        }
+
                         _newTrip.Point = (MapPoint)graphic.Geometry;
+
                         DrawCommand.RaiseCanExecuteChanged();
                         AddTrip.RaiseCanExecuteChanged();
-                        RemoveCommand.RaiseCanExecuteChanged();
+                        RemoveTripFromMap.RaiseCanExecuteChanged();
                     }, obj =>
                     {
                         return _newTrip.Point == null; 
@@ -145,23 +155,53 @@ namespace TravelManager.Presentation.ViewModels
             }
         }
 
-        private DelegateCommand _removeCommand;
+        private DelegateCommand _removeTripFromMap;
 
-        public DelegateCommand RemoveCommand
+        public DelegateCommand RemoveTripFromMap
         {
             get
             {
-                return _removeCommand ??
-                    (_removeCommand = new DelegateCommand(async obj =>
+                return _removeTripFromMap ??
+                    (_removeTripFromMap = new DelegateCommand(async obj =>
                     {
-                        CursoreType = CursorType.Cross.ToString();
+                        CursorType = Cursors.Cross;
                         var graphic = await _tripManager.DeleteTrip();
-                        var id = (string)graphic.Attributes[TRIPID];
-                        RemoveDeletedTrip(id);
-                        CursoreType = CursorType.Arrow.ToString();
+
+                        if (graphic == null)
+                        {
+                            return;
+                        }
+
+                        var id = (string)graphic.Attributes[TRIP_ID];
+                        RemoveTripById(id);
+                        CursorType = Cursors.Arrow;
                     }, obj =>
                     {
                         return AllTrips.Count != 0;
+                    }
+                    ));
+            }
+        }
+
+        private DelegateCommand _removeTrip;
+
+        public DelegateCommand RemoveTrip
+        {
+            get
+            {
+                return _removeTrip ??
+                    (_removeTrip = new DelegateCommand(currentTrip =>
+                    {
+                        var result = _messageBox.Show("Do you want to delete this trip?", "Deleting dialog", DialogType.YesNo);
+
+                        if(result == DialogResult.No)
+                        {
+                            return;
+                        }
+
+                        _tripManager.DeleteTripGraphicById(((TripViewModel)currentTrip).Id);
+                        RemoveTripById(((TripViewModel)currentTrip).Id);
+                        RemoveTripFromMap.RaiseCanExecuteChanged();
                     }
                     ));
             }
@@ -176,10 +216,13 @@ namespace TravelManager.Presentation.ViewModels
             Type = TripType.Beach;
 
             _newTrip = new TripModel();
+            RemoveTrip.RaiseCanExecuteChanged();
+            RemoveTripFromMap.RaiseCanExecuteChanged();
             DrawCommand.RaiseCanExecuteChanged();
+            AddTrip.RaiseCanExecuteChanged();
         }
 
-        private void RemoveDeletedTrip(string id)
+        private void RemoveTripById(string id)
         {
             var trip = AllTrips.FirstOrDefault(s => s.Id == id);
             AllTrips.Remove(trip);

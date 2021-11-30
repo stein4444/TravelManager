@@ -23,7 +23,7 @@ namespace TravelManager.Presentation.GraphicsManger
         private readonly SketchEditor _sketchEditor;
         private readonly MapView _map;
         private ImageResourse _images;
-        private const string TRIPID = "id";
+        private const string TRIP_ID = "id";
 
         public TripGraphicsManager(MapView map)
         {
@@ -42,9 +42,12 @@ namespace TravelManager.Presentation.GraphicsManger
                 if (mapPoint != null)
                 {
                     var compositeSymbol = CreateTripSymbol(_images.Images[type], label);
+
                     Graphic tripGraphic = new Graphic((MapPoint)mapPoint, compositeSymbol);
-                    tripGraphic.Attributes[TRIPID] = id;
+                    tripGraphic.Attributes[TRIP_ID] = id;
+
                     _overlay.Graphics.Add(tripGraphic);
+
                     return tripGraphic;
                 }
                 return null;
@@ -61,9 +64,30 @@ namespace TravelManager.Presentation.GraphicsManger
 
         public async Task<Graphic> DeleteTrip()
         {
-            var graphic = await GetGraphicAsync();
+            try
+            {
+                var graphic = await GetGraphicAsync();
+                _overlay.Graphics.Remove(graphic);
+                return graphic;
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public void DeleteTripGraphicById(string id)
+        {
+            var graphic = _overlay.Graphics.FirstOrDefault(g => g.Attributes[TRIP_ID] == id);
+            if(graphic == null)
+            {
+                return;
+            }
             _overlay.Graphics.Remove(graphic);
-            return graphic;
         }
 
         private async Task<Graphic> GetGraphicAsync()
@@ -76,6 +100,7 @@ namespace TravelManager.Presentation.GraphicsManger
 
             Graphic graphic = null;
             IdentifyGraphicsOverlayResult idResult = results.FirstOrDefault();
+
             if (idResult != null && idResult.Graphics.Count > 0)
             {
                 graphic = idResult.Graphics.FirstOrDefault();

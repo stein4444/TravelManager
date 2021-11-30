@@ -18,7 +18,7 @@
             </Style.Setters>
         </Style>
 
-        <local:UriConverter x:Key="UriConverter" />
+        <local:TripTypeToUriConverter x:Key="UriConverter" />
     </Window.Resources>
 
     <Grid x:Name="MainGrid">
@@ -29,10 +29,10 @@
         <DockPanel Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="350"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel Grid.Column="1" Cursor="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.CursoreType, Mode=TwoWay}">
+                <DockPanel Grid.Column="1" Cursor="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.CursorType}">
                     <esri:MapView x:Name="MainMap" Map="{Binding MapViewModel.Map}" />
                 </DockPanel>
                 <DockPanel Grid.Column="0">
@@ -79,7 +79,7 @@
 
                                         <Button Grid.Column="1" FontSize="20" Margin="10" Content="remove"
                                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.RemoveCommand}">
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.RemoveTripFromMap}">
                                         </Button>
 
                                     </StackPanel>
@@ -94,7 +94,31 @@
                                                 <GridViewColumn Header="Type">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <Image Source="{Binding Path=Type, Converter={StaticResource UriConverter}}"></Image>
+                                                            <Image Source="{Binding Path=Type, Converter={StaticResource UriConverter}}" Width="32" Height="32"></Image>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Delete">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.RemoveTrip}" CommandParameter="{Binding .}">
+                                                                <Canvas Name="canvas" Height="25"  Width="25">
+                                                                    <Path Stroke="Red" StrokeThickness="2">
+                                                                        <Path.Data>
+                                                                            <PathGeometry>
+                                                                                <PathGeometry.Figures>
+                                                                                    <PathFigure StartPoint="0,0">
+                                                                                        <LineSegment Point="25,25"/>
+                                                                                    </PathFigure>
+                                                                                    <PathFigure StartPoint="0,25">
+                                                                                        <LineSegment Point="25,0"/>
+                                                                                    </PathFigure>
+                                                                                </PathGeometry.Figures>
+                                                                            </PathGeometry>
+                                                                        </Path.Data>
+                                                                    </Path>
+                                                                </Canvas>
+                                                            </Button>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>

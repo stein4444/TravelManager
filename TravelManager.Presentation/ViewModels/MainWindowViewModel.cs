@@ -30,11 +30,11 @@ namespace TravelManager.Presentation.ViewModels
             }
         }
 
-        public MainWindowViewModel(ITripGraphicsManager tripManager)
+        public MainWindowViewModel(ITripGraphicsManager tripManager, IMessageBoxWrapper _messageBox)
         {
             _tripManager = tripManager;
             MapViewModel = new MapViewModel();
-            MenuViewModel = new MenuViewModel(_tripManager);
+            MenuViewModel = new MenuViewModel(_tripManager, _messageBox);
             StatusViewModel = new StatusBarViewModel();
         }
     }

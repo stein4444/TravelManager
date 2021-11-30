@@ -20,12 +20,12 @@ namespace TravelManager.Presentation.Commands
             this.executeMethod = executeMethod;
         }
 
-        protected override bool CanExecute(object parameter)
+        public override bool CanExecute(object parameter)
         {
             return canExecuteMethod(parameter);
         }
 
-        protected override void Execute(object parameter)
+        public override void Execute(object parameter)
         {
             executeMethod(parameter);
         }
