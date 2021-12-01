@@ -1,6 +1,7 @@
 ﻿using Esri.ArcGISRuntime;
 using System;
 using System.Windows;
+using TravelManager.Presentation.DependencyInjection;
 
 namespace TravelManager.Presentation
 {
@@ -13,6 +14,7 @@ namespace TravelManager.Presentation
         {
             try
             {
+                IocKernel.Initialize(new IocConfiguration());
                 ArcGISRuntimeEnvironment.Initialize();
             }
             catch (Exception ex)

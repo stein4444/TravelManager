@@ -8,10 +8,11 @@ using TravelManager.ApplicationServices.ViewModels.Base;
 using TravelManager.Domain.Entities;
 using TravelManager.Domain.Interfaces;
 using TravelManager.Presentation.Commands;
+using TravelManager.Presentation.ViewModelsInterfaces;
 
 namespace TravelManager.Presentation.ViewModels
 {
-    public class MenuViewModel : ViewModelBase
+    public class MenuViewModel : ViewModelBase, IMenuViewModel
     {
         private const int MIN_TRIP_NAME_LENGTH = 3;
         private const string TRIP_ID = "id";

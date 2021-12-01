@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TravelManager.Domain.Entities;
+using TravelManager.Domain.Interfaces;
 using TravelManager.Presentation.ViewModels;
 using TravelManager_MsTests.Stubs;
 
@@ -14,7 +15,6 @@ namespace TravelManager_MsTests.ViewModelTests
     [TestClass]
     public class MenuViewModelTests
     {
-
         [TestMethod]
         public async Task MenuViewModel_AddTripCommandExecute_CreatedTripCorrectly_Test()
         {

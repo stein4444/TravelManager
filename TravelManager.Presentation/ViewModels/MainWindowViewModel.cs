@@ -1,20 +1,20 @@
 ﻿using TravelManager.ApplicationServices.ViewModels.Base;
 using TravelManager.Domain.Interfaces;
+using TravelManager.Presentation.DependencyInjection;
+using TravelManager.Presentation.ViewModels.Factories;
+using TravelManager.Presentation.ViewModelsInterfaces;
 
 namespace TravelManager.Presentation.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
         #region PrivateFields
         private string _applicationTitile = "Travel Manager";
-        private readonly ITripGraphicsManager _tripManager;
-
         #endregion
 
         #region ViewModels
-        public MapViewModel MapViewModel { get; set; }
-        public MenuViewModel MenuViewModel { get; set; }
-        public StatusBarViewModel StatusViewModel { get; set; }
+        public IMapViewModel MapViewModel { get; set; }
+        public IMenuViewModel MenuViewModel { get; set; }
         #endregion
 
         /// <summary>
@@ -30,12 +30,10 @@ namespace TravelManager.Presentation.ViewModels
             }
         }
 
-        public MainWindowViewModel(ITripGraphicsManager tripManager, IMessageBoxWrapper _messageBox)
+        public MainWindowViewModel(IViewModelFactory viewModelFactory)
         {
-            _tripManager = tripManager;
-            MapViewModel = new MapViewModel();
-            MenuViewModel = new MenuViewModel(_tripManager, _messageBox);
-            StatusViewModel = new StatusBarViewModel();
+            MapViewModel = viewModelFactory.CreateMapViewModel();
+            MenuViewModel = viewModelFactory.CreateMenuViewModel();
         }
     }
 }

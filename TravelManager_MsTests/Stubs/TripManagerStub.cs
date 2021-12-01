@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UI.Controls;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace TravelManager_MsTests.Stubs
     {
         public Graphic FakeGraphic { get; set; }
         public List<Graphic> Graphics { get; set; } = new List<Graphic>();
+        public MapView Map { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
         public Task<Graphic> DeleteTrip()
         {
             return Task.FromResult(FakeGraphic);

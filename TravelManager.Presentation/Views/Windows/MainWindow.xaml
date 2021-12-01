@@ -33,7 +33,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel Grid.Column="1" Cursor="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.CursorType}">
-                    <esri:MapView x:Name="MainMap" Map="{Binding MapViewModel.Map}" />
+                    <esri:MapView x:Name="MainMap" Map="{Binding ElementName=MainGrid, Path=DataContext.MapViewModel.Map}" />
                 </DockPanel>
                 <DockPanel Grid.Column="0">
                     <DockPanel>
@@ -134,8 +134,7 @@
         </DockPanel>
         <DockPanel Grid.Row="1" LastChildFill="True">
             <Border Background="LightGray" CornerRadius="10">
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"
-                Content="{Binding StatusViewModel.Status}"></Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
             </Border>
         </DockPanel>
     </Grid>

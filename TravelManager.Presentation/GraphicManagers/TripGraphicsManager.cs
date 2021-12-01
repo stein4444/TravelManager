@@ -19,17 +19,20 @@ namespace TravelManager.Presentation.GraphicsManger
 {
     public class TripGraphicsManager : ITripGraphicsManager
     {
-        private readonly GraphicsOverlay _overlay;
-        private readonly SketchEditor _sketchEditor;
-        private readonly MapView _map;
+        private GraphicsOverlay _overlay;
+        private SketchEditor _sketchEditor;
+
         private ImageResourse _images;
         private const string TRIP_ID = "id";
+        private MapView _map;
 
         public TripGraphicsManager(MapView map)
         {
-            _overlay = map.GraphicsOverlays.Single();
-            _sketchEditor = map.SketchEditor;
             _map = map;
+            _overlay = new GraphicsOverlay();
+            _map.GraphicsOverlays.Add(_overlay);
+            _overlay = _map.GraphicsOverlays.Single();
+            _sketchEditor = _map.SketchEditor;
             _images = new ImageResourse(); 
         }
 

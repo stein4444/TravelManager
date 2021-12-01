@@ -11,6 +11,8 @@
     <PackageReference Include="Esri.ArcGISRuntime" Version="100.12.0" />
     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.12.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace TravelManager.ApplicationServices.ViewModels.Base
 {
+    public delegate TViewModel CreateViewModel<TViewModel>() where TViewModel : ViewModelBase;
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

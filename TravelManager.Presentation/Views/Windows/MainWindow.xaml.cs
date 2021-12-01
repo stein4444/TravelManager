@@ -1,7 +1,6 @@
-﻿using Esri.ArcGISRuntime.UI;
-using MahApps.Metro.Controls;
-using TravelManager.Presentation.GraphicsManger;
-using TravelManager.Presentation.ViewModels;
+﻿using MahApps.Metro.Controls;
+using TravelManager.Presentation.DependencyInjection;
+using TravelManager.Presentation.ViewModelsInterfaces;
 
 namespace TravelManager.Presentation.Views.Windows
 {
@@ -13,16 +12,7 @@ namespace TravelManager.Presentation.Views.Windows
         public MainWindow()
         {
             InitializeComponent();
-
-            var tripsOverlay = new GraphicsOverlay();
-
-            MainMap.GraphicsOverlays.Add(tripsOverlay);
-
-            TripGraphicsManager tripManager = new TripGraphicsManager(MainMap);
-            MessageBoxWrapper messageBoxWrapper = new MessageBoxWrapper();
-
-            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(tripManager,messageBoxWrapper);
-            this.DataContext = mainWindowViewModel;
+            this.DataContext = IocKernel.Get<IMainWindowViewModel>();
         }
     }
 }
