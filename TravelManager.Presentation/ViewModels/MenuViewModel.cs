@@ -8,6 +8,7 @@ using TravelManager.ApplicationServices.ViewModels.Base;
 using TravelManager.Domain.Entities;
 using TravelManager.Domain.Interfaces;
 using TravelManager.Presentation.Commands;
+using TravelManager.Presentation.FileEditors;
 using TravelManager.Presentation.ViewModelsInterfaces;
 
 namespace TravelManager.Presentation.ViewModels
@@ -18,14 +19,18 @@ namespace TravelManager.Presentation.ViewModels
         private const string TRIP_ID = "id";
         private readonly ITripGraphicsManager _tripManager;
         private readonly IMessageBoxWrapper _messageBox;
+        private readonly IMessageBusWrapper<Notification> _messageBusWrapper;
         private TripModel _newTrip;
+        private FileSaver _fileSaver;
 
-        public MenuViewModel(ITripGraphicsManager tripManager, IMessageBoxWrapper messageBox)
+        public MenuViewModel(ITripGraphicsManager tripManager, IMessageBoxWrapper messageBox, IMessageBusWrapper<Notification> messageBusWrapper)
         {
             _tripManager = tripManager;
             _messageBox = messageBox;
+            _messageBusWrapper = messageBusWrapper;
             _newTrip = new TripModel(); 
             AllTrips = new ObservableCollection<TripViewModel>();
+            _fileSaver = new FileSaver();
             _cursorType = Cursors.Arrow;
         }
 
@@ -118,7 +123,8 @@ namespace TravelManager.Presentation.ViewModels
                       _newTrip.VisitDate = VisitDate;
                       AllTrips.Add(new TripViewModel(_newTrip));
                       ResetTripForm();
-                      
+                      ExportTrips.RaiseCanExecuteChanged();
+                      CreateMessage(new Notification { Type = SpecificNotifications.SaveInfo });
                   }, obj =>
                   {
                       return Name?.Length > MIN_TRIP_NAME_LENGTH && _newTrip.Point != null;
@@ -148,6 +154,7 @@ namespace TravelManager.Presentation.ViewModels
                         DrawCommand.RaiseCanExecuteChanged();
                         AddTrip.RaiseCanExecuteChanged();
                         RemoveTripFromMap.RaiseCanExecuteChanged();
+                        CreateMessage(new Notification { Type = SpecificNotifications.DrawInfo });
                     }, obj =>
                     {
                         return _newTrip.Point == null; 
@@ -176,6 +183,7 @@ namespace TravelManager.Presentation.ViewModels
                         var id = (string)graphic.Attributes[TRIP_ID];
                         RemoveTripById(id);
                         CursorType = Cursors.Arrow;
+                        CreateMessage(new Notification { Type = SpecificNotifications.SaveWarning });
                     }, obj =>
                     {
                         return AllTrips.Count != 0;
@@ -203,8 +211,27 @@ namespace TravelManager.Presentation.ViewModels
                         _tripManager.DeleteTripGraphicById(((TripViewModel)currentTrip).Id);
                         RemoveTripById(((TripViewModel)currentTrip).Id);
                         RemoveTripFromMap.RaiseCanExecuteChanged();
+                        CreateMessage(new Notification{Type = SpecificNotifications.SaveWarning});
                     }
                     ));
+            }
+        }
+
+        private DelegateCommand _exportTrips;
+        public DelegateCommand ExportTrips
+        {
+            get
+            {
+                return _exportTrips ??
+                  (_exportTrips = new DelegateCommand(obj =>
+                  {
+                      SpecificNotifications notification = _fileSaver.Save(AllTrips);
+                      CreateMessage(new Notification {Type = notification });
+                  }, obj =>
+                  {
+                      return AllTrips.Count != 0; 
+                  }
+                  ));
             }
         }
 
@@ -227,6 +254,11 @@ namespace TravelManager.Presentation.ViewModels
         {
             var trip = AllTrips.FirstOrDefault(s => s.Id == id);
             AllTrips.Remove(trip);
+        }
+
+        private void CreateMessage(Notification notification)
+        {
+            _messageBusWrapper.SendMessage(notification, "Contract1");
         }
         #endregion
     }

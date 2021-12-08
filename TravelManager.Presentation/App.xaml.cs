@@ -2,6 +2,8 @@
 using System;
 using System.Windows;
 using TravelManager.Presentation.DependencyInjection;
+using TravelManager.Presentation.ViewModelsInterfaces;
+using TravelManager.Presentation.Views.Windows;
 
 namespace TravelManager.Presentation
 {

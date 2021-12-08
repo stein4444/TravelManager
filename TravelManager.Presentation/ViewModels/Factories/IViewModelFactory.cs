@@ -7,5 +7,6 @@ namespace TravelManager.Presentation.ViewModels.Factories
     {
         IMapViewModel CreateMapViewModel();
         IMenuViewModel CreateMenuViewModel();
+        INotificationViewModel CreateNotificationViewModel();
     }
 }

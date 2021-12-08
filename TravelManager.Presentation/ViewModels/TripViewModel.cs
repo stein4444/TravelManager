@@ -1,5 +1,4 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.UI;
 using System;
 using TravelManager.ApplicationServices.ViewModels.Base;
 using TravelManager.Domain.Entities;
@@ -63,12 +62,28 @@ namespace TravelManager.Presentation.ViewModels
             }
         }
 
-        public MapPoint Point
+
+        private double _latitude;
+        public double Latitude
         {
-            get { return _tripModel.Point; }
+            get 
+            { 
+                return _latitude = _tripModel.Point.Y;
+            }
             set
             {
-                _tripModel.Point = value;
+                _latitude = _tripModel.Point.Y;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _longitude;
+        public double Longitude
+        {
+            get { return _longitude = _tripModel.Point.X; }
+            set
+            {
+                _longitude = _tripModel.Point.X;
                 OnPropertyChanged();
             }
         }

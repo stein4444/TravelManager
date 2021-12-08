@@ -26,13 +26,23 @@ namespace TravelManager.Presentation.GraphicsManger
         private const string TRIP_ID = "id";
         private MapView _map;
 
-        public TripGraphicsManager(MapView map)
+        public MapView Map
         {
-            _map = map;
-            _overlay = new GraphicsOverlay();
-            _map.GraphicsOverlays.Add(_overlay);
-            _overlay = _map.GraphicsOverlays.Single();
-            _sketchEditor = _map.SketchEditor;
+            get { return _map; }
+            set 
+            {
+                _map = value;
+                if(_map != null)
+                {
+                    _overlay = new GraphicsOverlay();
+                    _map.GraphicsOverlays.Add(_overlay);
+                    _sketchEditor = _map.SketchEditor;
+                }
+            }
+        }
+
+        public TripGraphicsManager()
+        {
             _images = new ImageResourse(); 
         }
 
@@ -41,7 +51,7 @@ namespace TravelManager.Presentation.GraphicsManger
             try
             {
                 Geometry mapPoint = await _sketchEditor.StartAsync(SketchCreationMode.Point, false);
-
+                
                 if (mapPoint != null)
                 {
                     var compositeSymbol = CreateTripSymbol(_images.Images[type], label);
@@ -51,12 +61,15 @@ namespace TravelManager.Presentation.GraphicsManger
 
                     _overlay.Graphics.Add(tripGraphic);
 
+                    tripGraphic.Geometry = GeometryEngine.Project((MapPoint)mapPoint, SpatialReferences.Wgs84);
                     return tripGraphic;
                 }
+                
                 return null;
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException x)
             {
+                MessageBox.Show(x.Message,x.Source);
                 return null;
             }
             catch (Exception ex)

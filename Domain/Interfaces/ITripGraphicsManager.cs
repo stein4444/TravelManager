@@ -7,6 +7,7 @@ namespace TravelManager.Domain.Interfaces
 {
     public interface ITripGraphicsManager
     {
+        MapView Map { get; set; }
         void DeleteTripGraphicById(string id);
         Task<Graphic> DeleteTrip();
         Task<Graphic> DrawTrip(TripType type, string label, string id);

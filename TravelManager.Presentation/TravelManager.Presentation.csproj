@@ -8,16 +8,20 @@
 	</PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Esri.ArcGISRuntime" Version="100.12.0" />
     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.12.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Ninject.Extensions.Factory" Version="3.3.3" />
+    <PackageReference Include="ReactiveUI" Version="17.0.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="17.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\TravelManager.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\TravelManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\TravelManager.DomainServices\TravelManager.DomainServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +34,10 @@
 		<Resource Include="Images\mountains.jpg" />
 		<Resource Include="Images\city.jpg" />
 		<Resource Include="Images\country.jpg" />
+		<Resource Include="Images\error.png" />
+		<Resource Include="Images\info.png" />
+		<Resource Include="Images\warning.png" />
+		<Resource Include="Images\welcome.png" />
 	</ItemGroup>
 
 </Project>

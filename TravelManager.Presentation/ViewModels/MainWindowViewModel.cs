@@ -15,6 +15,7 @@ namespace TravelManager.Presentation.ViewModels
         #region ViewModels
         public IMapViewModel MapViewModel { get; set; }
         public IMenuViewModel MenuViewModel { get; set; }
+        public INotificationViewModel NotificationViewModel { get; set; }
         #endregion
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace TravelManager.Presentation.ViewModels
         {
             MapViewModel = viewModelFactory.CreateMapViewModel();
             MenuViewModel = viewModelFactory.CreateMenuViewModel();
+            NotificationViewModel = viewModelFactory.CreateNotificationViewModel();
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿<mah:MetroWindow  x:Class="TravelManager.Presentation.Views.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:TravelManager.Presentation.Convertors"
-        mc:Ignorable="d"
+        xmlns:cor="clr-namespace:TravelManager.Presentation.Convertors"
+        mc:Ignorable=""
         Title="{Binding Title}" Height="768" Width="1024">
 
     <Window.Resources>
@@ -18,13 +18,48 @@
             </Style.Setters>
         </Style>
 
+        <!--<Style x:Key="MyStyles" TargetType="{x:Type DockPanel}">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=NofificationLable, Path=}" Value="New">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                                <Storyboard >
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"  From="1" To="1" Duration="0:0:3" />
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" BeginTime="0:0:3" From="1" To="0" DecelerationRatio=".5" Duration="0:0:2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+                </Style.Triggers>
+        </Style>-->
+
+        <Style x:Key="NotificationAnimationStyle" TargetType="{x:Type DockPanel}" >
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                    <EventTrigger.Actions>
+                        <StopStoryboard BeginStoryboardName="EndAnimation" />
+                        <BeginStoryboard Name="NewAnimation">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"  From="1" To="1" Duration="0:0:3" />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" BeginTime="0:0:3" From="1" To="0" DecelerationRatio=".5" Duration="0:0:2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
+       
+            
         <local:TripTypeToUriConverter x:Key="UriConverter" />
+        <cor:NotificationConverter x:Key="NotificationConverter"/>
     </Window.Resources>
 
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <Grid>
@@ -55,7 +90,7 @@
                                         <TextBox x:Name="PositionName" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                                         <Label Style="{StaticResource LabelStyle}" Content="Location Description"/>
-                                        
+
                                         <TextBox x:Name="PositionDescription" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                                         <Label Style="{StaticResource LabelStyle}">Visit Date</Label>
@@ -67,7 +102,7 @@
                                         <ComboBox x:Name="PoiTypesComboBox" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.TripTypes}" 
                                                  SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                                        <Button Grid.Column="1" FontSize="20" Margin="10" Content="Draw"
+                                        <Button x:Name="buttonAdd" Grid.Column="1" FontSize="20" Margin="10" Content="Draw"
                                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                                                 Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.DrawCommand}">
                                         </Button>
@@ -82,10 +117,16 @@
                                                 Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.RemoveTripFromMap}">
                                         </Button>
 
+                                        <Button Grid.Column="1" FontSize="20" Margin="10" Content="export"
+                                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                Command="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.ExportTrips}">
+                                        </Button>
+
                                     </StackPanel>
                                 </Expander>
                                 <Expander Grid.Row="1" Header="All trips">
-                                    <ListView x:Name="TripList" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AllTrips}">
+                                    <ListView x:Name="TripList" ItemsSource="{Binding ElementName=MainGrid, Path=DataContext.MenuViewModel.AllTrips}" 
+                                              HorizontalContentAlignment="Stretch">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
@@ -132,10 +173,54 @@
                 </DockPanel>
             </Grid>
         </DockPanel>
-        <DockPanel Grid.Row="1" LastChildFill="True">
-            <Border Background="LightGray" CornerRadius="10">
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
-            </Border>
-        </DockPanel>
+        <Border Grid.Row="1" Background="LightGray" CornerRadius="10" >
+
+            <DockPanel LastChildFill="True" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="{Binding ElementName=MainGrid, Path=DataContext.NotificationViewModel.NotificationType, Converter={StaticResource NotificationConverter}, NotifyOnTargetUpdated=True}" Grid.Column="0"
+                           HorizontalAlignment="Right" Width="32" Height="32">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard Name="NewAnimation">
+                                                <Storyboard TargetProperty="Opacity">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"  From="0" To="1" Duration="0:0:1" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" BeginTime="0:0:3" From="1" To="0" DecelerationRatio=".5" Duration="0:0:2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+
+                    <Label x:Name="NofificationLable" ToolTipService.ShowDuration="5" Content="{Binding ElementName=MainGrid, Path=DataContext.NotificationViewModel.Message, NotifyOnTargetUpdated=True}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" >
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard Name="NewAnimation">
+                                                <Storyboard TargetProperty="Opacity">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"  From="0" To="1" Duration="0:0:3" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" BeginTime="0:0:3" From="1" To="0" DecelerationRatio=".5" Duration="0:0:2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        </Label.Style>
+                    </Label>
+                </Grid>
+            </DockPanel>
+        </Border>
     </Grid>
 </mah:MetroWindow>
